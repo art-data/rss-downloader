@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+- iojs
+script:
+- npm start
+deploy:
+  provider: s3
+  access_key_id: AKIAILZRCNJM4EID642Q
+  secret_access_key:
+    secure: gB9+qHjQbN7OgdP4P9CSYkWU43GC4me1Vi3BzcSIMoBtsibYATlDYqNwHJTRBMmo1a6djIddtH6bVUoTB/fMRewxZKKOPy3eHaCaP6dD9hKd8Sy6bfDAx1Tmvpo8Y169Srep/hGPfRb5BF9TO+PDjIwbZohCoWHwVQ1HKldhxtZV5xxJb/j0fL7mOaDvZnFZIG0FP0uukFfSan057agPLe+FiGJITFfgwzKycEYab7atEW3sk+Hi4MuOvwIrw0lgOtu7ykwdFMZtPrA+kQPq0IT21ocTni9aG7/cqqFk7/21tHhJKL+MOICSZswrPgLwHROOOyiu+bF2kzqy9Ro7tLGBX2jcdFXh7WF9Y4HRUoU9QT8mE+tzqS28q4NOoh3s1cJ7Lm1wJIKXnq0xXCh1f9r2mBrcs7vijcJjg8r0UWoSyMsd0VritTaBvddLJVehjHEtGM/JmwFV9LjcSsaNNXeu0g2d5IDvU+qOZ9T9t9kq1qCLQpoHsaUtzWZxRiv4nWh0omWn43rnYsGmdTGILGCF5E9BMG/W8otPvz5/N3cFYpygreHQj5tK+8b7GuoQk1eEXHcMJWpEeLArBZ/HzokcBVq0e1IH4DGO2aUvkvr8pX+CRm9UsmdBYL7JAaCqenaUiTYGMk5IZHV4+01QMeegigULE5cUlhRWXCNWX9g=
+  bucket: art-data
+  local-dir: feeds
+  acl: public_read
+  on:
+    repo: art-data/rss-downloader
