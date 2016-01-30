@@ -3,6 +3,7 @@ node_js:
 - iojs
 script:
 - npm start
+- tree feeds > feeds/tree.txt
 deploy:
   skip_cleanup: true
   provider: s3

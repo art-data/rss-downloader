@@ -7,7 +7,6 @@ var date_format = require('date-format')
 
 var now = new Date()
 
-
 for (var blog of blogs) {
   var date = date_format(now, 'isoDateTime')
   console.log(date, blog.url, blog.name)
