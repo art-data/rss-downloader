@@ -10,5 +10,9 @@
   {
     "name": "Artforum",
     "url":  "http://artforum.com/rss.xml"
+  },
+  {
+    "name": "e-flux",
+    "url": "http://www.e-flux.com/category/announcements/feed/"
   }
 ]
