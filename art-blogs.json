@@ -1,10 +1,14 @@
 [
   {
-    "name": "some blog",
-    "url":  "http://blog.com/rss"
+    "name": "Art F City",
+    "url":  "http://artfcity.com/feed"
   },
   {
-    "name": "some other blog",
-    "url":  "http://blog.org/rss"
+    "name": "Hyperallergic",
+    "url":  "http://feeds.hyperallergic.com/hyperallergic"
+  }
+  {
+    "name": "Artforum",
+    "url":  "http://artforum.com/rss.xml"
   }
 ]
