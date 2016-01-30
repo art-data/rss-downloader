@@ -2,5 +2,9 @@
   {
     "name": "some blog",
     "url":  "http://blog.com/rss"
+  },
+  {
+    "name": "some other blog",
+    "url":  "http://blog.org/rss"
   }
 ]
