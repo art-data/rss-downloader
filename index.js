@@ -9,7 +9,8 @@ var now = new Date()
 
 
 for (var blog of blogs) {
-  console.log(blog.url)
+  var date = date_format(now, 'isoDateTime')
+  console.log(date, blog.url, blog.name)
   var date_dir = 'feeds/' + date
   if (!fs.existsSync(date_dir)) {
     fs.mkdirSync(date_dir)
@@ -18,7 +19,6 @@ for (var blog of blogs) {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir)
   }
-  var date = date_format(now, 'isoDateTime')
   request(blog.url).pipe(fs.createWriteStream(dir + '/feed.rss'))
 }
 
