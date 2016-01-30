@@ -1,0 +1,19 @@
+{
+  "name": "rss-downloader",
+  "version": "1.0.0",
+  "description": "This thingy downloads rss feeds",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/art-data/rss-downloader.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/art-data/rss-downloader/issues"
+  },
+  "homepage": "https://github.com/art-data/rss-downloader#readme"
+}
