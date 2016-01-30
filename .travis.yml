@@ -4,6 +4,7 @@ node_js:
 script:
 - npm start
 deploy:
+  skip_cleanup: true
   provider: s3
   access_key_id: AKIAILZRCNJM4EID642Q
   secret_access_key:
