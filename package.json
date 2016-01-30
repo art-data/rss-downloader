@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/art-data/rss-downloader/issues"
   },
-  "homepage": "https://github.com/art-data/rss-downloader#readme"
+  "homepage": "https://github.com/art-data/rss-downloader#readme",
+  "dependencies": {
+    "request": "^2.69.0"
+  }
 }
