@@ -4,14 +4,12 @@
   "description": "This thingy downloads rss feeds",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "iojs index.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/art-data/rss-downloader.git"
   },
-  "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/art-data/rss-downloader/issues"
