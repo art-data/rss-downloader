@@ -15,16 +15,10 @@ const gen_key = function (date, blog_name) {
 }
 
 exports.handler = function (event, context) {
-  console.log('just called. event:', event, 'context:', context)
-
   let now = new Date()
-  let date = date_format(now, 'isoDateTime')
-
-  console.log('gonna do the blogs. there are', blogs.length)
+  let date = date_format(now, 'YYYY-MM-dd-at-hh-mm-ss')
 
   for (let blog of blogs) {
-    console.log('doing a blog', date, blog.name)
-
     let key = gen_key(date, blog.name)
 
     request(blog.url, function (err, res, body) {
