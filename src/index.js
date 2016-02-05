@@ -1,30 +1,28 @@
-'use strict'
-
-var AWS = require('aws-sdk')
-var request = require('request')
-var blogs = require('./art-blogs.json')
-var date_format = require('date-format')
+const AWS = require('aws-sdk')
+const request = require('request')
+const blogs = require('./art-blogs.json')
+const date_format = require('date-format')
 
 exports.handler = function (event, context) {
   console.log('just called. event:', event, 'context:', context)
 
-  var now = new Date()
+  let now = new Date()
 
-  for (var blog of blogs) {
-    var date = date_format(now, 'isoDateTime')
+  for (let blog of blogs) {
+    let date = date_format(now, 'isoDateTime')
     console.log(date, blog.url, blog.name)
 
-    var date_dir = 'feeds/' + date
-    var dir = date_dir + '/' + blog.name
-    var key = (dir + '/feed.rss')
+    let date_dir = 'feeds/' + date
+    let dir = date_dir + '/' + blog.name
+    let key = (dir + '/feed.rss')
 
-    var s3 = new AWS.S3()
+    let s3 = new AWS.S3()
     request(blog.url, function (err, res, body) {
       if (err) {
         console.log(err)
         return
       }
-      var params = {
+      let params = {
         Bucket: 'art-data',
         Key: key,
         Body: body
