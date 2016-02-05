@@ -16,7 +16,7 @@ const gen_key = function (date, blog_name) {
 
 exports.handler = function (event, context) {
   let now = new Date()
-  let date = date_format(now, 'YYYY-MM-dd-at-hh-mm-ss')
+  let date = date_format(now, 'YYYY-MM-dd hh:mm:ss')
 
   for (let blog of blogs) {
     let key = gen_key(date, blog.name)
