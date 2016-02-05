@@ -5,7 +5,9 @@ var request = require('request')
 var blogs = require('./art-blogs.json')
 var date_format = require('date-format')
 
-exports.handler = function () {
+exports.handler = function (event, context) {
+  console.log('just called. event:', event, 'context:', context)
+
   var now = new Date()
 
   for (var blog of blogs) {
