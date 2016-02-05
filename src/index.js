@@ -5,24 +5,35 @@ require('babel-polyfill')
 
 const AWS = require('aws-sdk')
 const request = require('request')
-const blogs = require('./art-blogs.json')
 const date_format = require('date-format')
 
 // since this is running on lambda, it's automatically authorized to write to s3
 let s3 = new AWS.S3()
 
+const get_config = function (context) {
+  s3.getObject({
+    Bucket: (process.env.CONFIG_BUCKET || 'art-data'),
+    Key: (process.env.CONFIG_FILE || 'art-blogs.json')
+  }, function (err, data) {
+    if (err) { return context.fail(err) }
+    return data
+  })
+}
+
 // function to generate an s3 key (<- filename) from a date and a blog name
-const gen_key = function (date, blog_name) {
-  let date_dir = 'feeds/' + date
-  let dir = date_dir + '/' + blog_name
-  let key = (dir + '/feed.rss')
+const gen_key = function (date, blog) {
+  const date_dir = (process.env.OUTPUT_KEY_PREFIX || 'downloads/') + date + '/'
+  const dir = date_dir + blog.name + '/'
+  const key = (dir + (blog.key || 'feed.rss'))
   return key
 }
 
 // this function is called by aws lambda
 exports.handler = function (event, context) {
-  let now = new Date()
-  let date = date_format(now, 'YYYY-MM-dd hh:mm:ss')
+  const blogs = get_config(context)
+
+  const now = new Date()
+  const date = date_format(now, 'YYYY-MM-dd hh:mm:ss')
 
   // track s3 successes
   let result = []
@@ -33,7 +44,7 @@ exports.handler = function (event, context) {
     request(blog.url, function (err, res, body) {
       if (err) { result.push(err); return }
       let params = {
-        Bucket: 'art-data',
+        Bucket: (process.env.OUT_BUCKET || 'art-data'),
         Key: key,
         Body: body
       }
