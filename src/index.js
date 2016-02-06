@@ -4,57 +4,92 @@
 require('babel-polyfill')
 
 const AWS = require('aws-sdk')
-const request = require('request')
+const request = require('request-promise')
 const date_format = require('date-format')
+const config = require('./config.json')
+const do_all_promises = require('./do_all_promises.js')
 
 // since this is running on lambda, it's automatically authorized to write to s3
 let s3 = new AWS.S3()
 
-const get_config = function (context) {
-  s3.getObject({
-    Bucket: (process.env.CONFIG_BUCKET || 'art-data'),
-    Key: (process.env.CONFIG_FILE || 'art-blogs.json')
-  }, function (err, data) {
-    if (err) { return context.fail(err) }
-    return data
+// function to get the json list of blogs from s3
+// see readme for config details
+const get_config = function () {
+  return new Promise(function (resolve, reject) {
+    let config_params = {
+      Bucket: (config.config_bucket || 'art-data'),
+      Key: (config.config_file || 'art-blogs.json')
+    }
+    s3.getObject(config_params, function (err, data) {
+      if (err) { reject(err) }
+      resolve(JSON.parse(data.Body))
+    })
   })
 }
 
-// function to generate an s3 key (<- filename) from a date and a blog name
+// accepts a date and a blog
+// returns an s3 key to upload to
 const gen_key = function (date, blog) {
-  const date_dir = (process.env.OUTPUT_KEY_PREFIX || 'downloads/') + date + '/'
+  const date_dir = (config.output_key_prefix || 'downloads/') + date + '/'
   const dir = date_dir + blog.name + '/'
   const key = (dir + (blog.key || 'feed.rss'))
   return key
 }
 
+// accepts an s3 key and a value
+// resolves when the upload is done
+const put_blog = function (key, body) {
+  return new Promise(function (resolve, reject) {
+    let params = {
+      Bucket: (config.output_bucket || 'art-data'),
+      Key: key,
+      Body: body
+    }
+    s3.upload(params, function (err, data) {
+      if (err) { reject(err); return }
+      resolve(data)
+    })
+  })
+}
+
+// accepts one blog and the date
+// resolves when that blog is on s3
+const get_blog = function (date, blog) {
+  return new Promise(function (resolve, reject) {
+    let key = gen_key(date, blog)
+
+    request(blog.url)
+      .then(function (blog_body) {
+        put_blog(key, blog_body)
+          .then(resolve)
+          .catch(reject)
+      })
+      .catch(reject)
+  })
+}
+
+// accepts an array of blogs (ie art-blogs.json)
+// resolves when all the blogs are on s3
+const get_blogs = function (blogs) {
+  return new Promise(function (resolve, reject) {
+    const now = new Date()
+    const date = date_format(now, 'YYYY-MM-dd hh:mm:ss')
+
+    // track s3 successes
+    let blog_promises = []
+
+    for (let blog of blogs) {
+      blog_promises.push(get_blog(date, blog))
+    }
+    resolve(do_all_promises(blog_promises))
+  })
+}
+
 // this function is called by aws lambda
 exports.handler = function (event, context) {
-  const blogs = get_config(context)
-
-  const now = new Date()
-  const date = date_format(now, 'YYYY-MM-dd hh:mm:ss')
-
-  // track s3 successes
-  let result = []
-
-  for (let blog of blogs) {
-    let key = gen_key(date, blog.name)
-
-    request(blog.url, function (err, res, body) {
-      if (err) { result.push(err); return }
-      let params = {
-        Bucket: (process.env.OUT_BUCKET || 'art-data'),
-        Key: key,
-        Body: body
-      }
-      s3.upload(params, function (err, data) {
-        if (err) { result.push(err); return }
-        result.push(data)
-      })
-    })
-  }
-  // context.succeed is a special aws lambda method
-  context.succeed(result)
+  get_config()
+    .then(get_blogs)
+    .then(context.succeed)
+    .catch(context.fail)
 }
 

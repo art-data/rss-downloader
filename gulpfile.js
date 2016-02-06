@@ -1,24 +1,22 @@
 const gulp = require('gulp')
 const babel = require('gulp-babel')
-const rename = require('gulp-rename')
 const install = require('gulp-install')
 const zip = require('gulp-zip')
 
-// first run the 'pub' and 'deps' tasks
+// first run the 'config' and 'deps' tasks
 // then compile ./src/index.js
 // put the output in ./build/index.js
-gulp.task('build', ['pub', 'deps'], function () {
-  return gulp.src('src/index.js')
+gulp.task('build', ['config', 'deps'], function () {
+  return gulp.src('src/*.js')
          .pipe(babel({
            presets: ['es2015']
          }))
-         .pipe(rename('index.js'))
          .pipe(gulp.dest('build'))
 })
 
-// copy everything in ./pub into ./build
-gulp.task('pub', function (cb) {
-  return gulp.src('./pub/**/*')
+// copy ./config.json into ./build
+gulp.task('config', function (cb) {
+  return gulp.src('./config.json')
          .pipe(gulp.dest('build'))
 })
 
