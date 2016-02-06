@@ -4,7 +4,7 @@ This thingy should download a bunch of files and then put them in an s3 bucket.
 
 It runs on AWS Lambda.
 
-the official lambda return value is an array that contains either successful s3 responses and/or errors. 
+the official lambda return value is an array that contains successful s3 responses and/or errors. 
 
 Website download or upload failures will not cause a lambda failure. Not finding the config file *will* cause a lambda failure.
 
