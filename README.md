@@ -50,7 +50,7 @@ The results are saved in an s3 bucket.
 
 The output keys look something like:
 
-'''javascript
+'''js
 `${config.output_key_prefix || 'downloads/'}/${date}/${website.name}/${website.key || 'feed.rss' }`
 '''
 
