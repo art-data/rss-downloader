@@ -36,8 +36,8 @@ That config file should look something like this:
 [
   {
     "name": "website-one",
-    "url":  "http://website.one.com/whatever"
-		"key": "this is optional. The default is 'feed.rss'".
+    "url":  "http://website.one.com/whatever",
+    "key": "this is optional. The default is 'feed.rss'"
   },
   {
     "name": "website-two",
