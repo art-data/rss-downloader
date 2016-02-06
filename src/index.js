@@ -7,7 +7,7 @@ const AWS = require('aws-sdk')
 const request = require('request-promise')
 const date_format = require('date-format')
 const config = require('./config.json')
-const do_all_promises = require('./do_all_promises.js')
+import do_all_promises from 'do_all_promises'
 
 // since this is running on lambda, it's automatically authorized to write to s3
 let s3 = new AWS.S3()
@@ -75,13 +75,12 @@ const get_blogs = function (blogs) {
     const now = new Date()
     const date = date_format(now, 'YYYY-MM-dd hh:mm:ss')
 
-    // track s3 successes
-    let blog_promises = []
+    // gather blog promises into a Promise.all-able array
+    let blog_promises = blogs.map(function (blog) {
+      return get_blog(date, blog)
+    })
 
-    for (let blog of blogs) {
-      blog_promises.push(get_blog(date, blog))
-    }
-    resolve(do_all_promises(blog_promises))
+    resolve(blog_promises)
   })
 }
 
@@ -89,6 +88,7 @@ const get_blogs = function (blogs) {
 exports.handler = function (event, context) {
   get_config()
     .then(get_blogs)
+    .then(do_all_promises)
     .then(context.succeed)
     .catch(context.fail)
 }
