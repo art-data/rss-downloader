@@ -43,6 +43,7 @@ const put_blog = function (key, body) {
     let params = {
       Bucket: (config.output_bucket || 'art-data'),
       Key: key,
+      ContentType: 'application/rss+xml',
       Body: body
     }
     s3.upload(params, function (err, data) {
